@@ -8,12 +8,12 @@ module.exports = {
         './src/app/bootstrap.js',
     ],
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: './dist',
+        contentBase: './build',
         compress: true,
         host: '0.0.0.0',
         port: 8000
