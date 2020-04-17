@@ -30,8 +30,8 @@ gameServer.define("game", GameRoom);
 
 
 //app.use('/', express.static(path.join(__dirname, "../../../dist")));
-console.log(__dirname);
-app.use('/', express.static("dist"));
+//console.log(__dirname);
+app.use('/', express.static(path.join(__dirname, "build")));
 
 // (optional) attach web monitoring panel
 //app.use('/colyseus', monitor());
@@ -41,7 +41,7 @@ gameServer.onShutdown(function(){
 });
 
 
-gameServer.listen(port, hostname);
+gameServer.listen(port); //, hostname
 
 // process.on("uncaughtException", (e) => {
 //   console.log(e.stack);
