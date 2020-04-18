@@ -106,7 +106,8 @@ export default class EnemyContainer extends TankContainer {
                 framewidth: 12,
                 image: 'bullet',
                 anchorPoint: {x:0,y:0},
-                angle: this.angleGun || 0
+                angle: this.angleGun || 0,
+                shootedBy: this.body.collisionType
             }
         ), 15);
 

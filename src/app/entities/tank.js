@@ -366,7 +366,6 @@ export default class TankContainer extends me.Container {
     explode() {
 
         this.stop(null);
-        me.device.vibrate(1000);
 
         const tank = this.getChildByName('TankEntity')[0];
         const gun = this.getChildByName('GunEntity')[0];
@@ -375,6 +374,7 @@ export default class TankContainer extends me.Container {
         gun.renderable.flicker(500, () => {
 
             if (this.name == 'TankContainer') {
+                me.device.vibrate(1000);
                 this.respawn();
             }
 
