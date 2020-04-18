@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node server.ts",
+    "start": "ts-node server.js",
     "serve": "webpack-dev-server --mode development",
     "watch": "webpack --watch",
     "build": "webpack -p"
@@ -20,11 +20,12 @@
     "script-loader": "^0.7.2",
     "shim-loader": "^1.0.1",
     "style-loader": "^1.1.3",
+    "ts-loader": "^7.0.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "colyseus": "^0.12.6",
