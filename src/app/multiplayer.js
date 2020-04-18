@@ -7,7 +7,7 @@ class Mp {
         //const host = '192.168.0.6';
         // const host = '0.0.0.0';
         const host = 'localhost';
-        const port = 2657;
+        const port = process.env.PORT || 2657;
 
         this.client = new Colyseus.Client(`ws://${host}:${port}`);
 
