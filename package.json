@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node server.ts",
     "serve": "webpack-dev-server --mode development",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "build": "webpack -p"
   },
   "engines": {
     "node": "13.0.0"
