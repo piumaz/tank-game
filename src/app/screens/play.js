@@ -25,7 +25,7 @@ export default class PlayScreen extends me.Stage {
         me.levelDirector.loadLevel("area01");
 
         // play the audio track
-        //me.audio.playTrack("gun_battle_sound-ReamProductions", 0.1);
+        me.audio.playTrack("gun_battle_sound-ReamProductions", 0.1);
 
         // reset the score
         game.data.score = 0;
