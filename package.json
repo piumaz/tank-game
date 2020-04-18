@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node server.ts",
     "serve": "webpack-dev-server --mode development",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "build": "webpack -p"
   },
   "engines": {
     "node": "13.0.0"
@@ -21,8 +22,6 @@
     "shim-loader": "^1.0.1",
     "style-loader": "^1.1.3",
     "ts-loader": "^7.0.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
@@ -35,6 +34,8 @@
     "express": "^4.17.1",
     "melonjs": "^7.1.1",
     "screenfull": "^5.0.2",
-    "serve-index": "^1.8.0"
+    "serve-index": "^1.8.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   }
 }
