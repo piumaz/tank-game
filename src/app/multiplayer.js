@@ -6,10 +6,14 @@ class Mp {
 
         //const host = '192.168.0.6';
         // const host = '0.0.0.0';
-        const host = 'localhost';
-        const port = process.env.PORT || 2657;
+        // const host = 'localhost';
+        // const port = 2657;
+        // this.client = new Colyseus.Client(`ws://${host}:${port}`);
+        //
+        var HOST = location.origin.replace(/^http/, 'ws');
 
-        this.client = new Colyseus.Client(`ws://${host}:${port}`);
+        this.client = new Colyseus.Client(HOST);
+
 
         this.room = null;
     }
