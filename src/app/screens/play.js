@@ -76,7 +76,7 @@ export default class PlayScreen extends me.Stage {
         });
 
 
-        me.event.subscribe(me.event.VIEWPORT_ONRESIZE, (e) => {
+        me.event.subscribe(me.event.WINDOW_ONORIENTATION_CHANGE, (e) => {
             console.log('change rotation', me.game.viewport.width, me.game.viewport.height);
 
             me.game.world.getChildByName('HUD')[0].width = me.game.viewport.width;

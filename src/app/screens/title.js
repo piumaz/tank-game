@@ -49,7 +49,7 @@ export default class TitleScreen extends me.Stage {
 
         }
 
-        me.event.subscribe(me.event.VIEWPORT_ONRESIZE, this.subResize);
+        me.event.subscribe(me.event.WINDOW_ONORIENTATION_CHANGE, this.subResize);
 
     }
 
@@ -58,7 +58,7 @@ export default class TitleScreen extends me.Stage {
      */
     onDestroyEvent() {
         console.log('destroy');
-        me.event.unsubscribe(me.event.VIEWPORT_ONRESIZE, this.subResize);
+        me.event.unsubscribe(me.event.WINDOW_ONORIENTATION_CHANGE, this.subResize);
 
         //me.input.unbindKey(me.input.KEY.ENTER);
         //me.input.unbindPointer(me.input.pointer.LEFT);
