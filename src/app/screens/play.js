@@ -25,13 +25,13 @@ export default class PlayScreen extends me.Stage {
         me.levelDirector.loadLevel("area01");
 
         // play the audio track
-        me.audio.playTrack("gun_battle_sound-ReamProductions", 0.1);
+        // me.audio.playTrack("gun_battle_sound-ReamProductions", 0.1);
 
         // reset the score
         game.data.score = 0;
 
 
-        me.game.world.addChild(me.pool.pull("HUD", 0, 0));
+        this.HUD = me.game.world.addChild(me.pool.pull("HUD", 0, 0));
 
 
         // join server
@@ -42,7 +42,7 @@ export default class PlayScreen extends me.Stage {
 
             Mp.onPlayerAdd((player, sessionId) => {
 
-                //console.log(player.x , player.y);
+                console.log('player add', player.x , player.y);
 
                 if (Mp.sessionId() === sessionId) {
                     players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, game.mp.playername, 83, 78), 5);
@@ -61,7 +61,7 @@ export default class PlayScreen extends me.Stage {
             });
 
             Mp.onPlayerChange((player, sessionId) => {
-                // console.log("player change!", player);
+                //console.log("player change!", player);
 
                 if (Mp.sessionId() === sessionId) {
                     // console.log("sono io, nulla");
@@ -77,13 +77,16 @@ export default class PlayScreen extends me.Stage {
 
 
         me.event.subscribe(me.event.VIEWPORT_ONRESIZE, (e) => {
+
             console.log('change rotation', me.game.viewport.width, me.game.viewport.height);
 
-            me.game.world.getChildByName('HUD')[0].width = me.game.viewport.width;
-            me.game.world.getChildByName('HUD')[0].height = me.game.viewport.height;
+            if (this.HUD) {
+                this.HUD.width = me.game.viewport.width;
+                this.HUD.height = me.game.viewport.height;
 
+                this.HUD.repositionChild();
+            }
 
-            me.game.world.getChildByName('HUD')[0].repositionChild();
 
         });
     }
@@ -93,7 +96,7 @@ export default class PlayScreen extends me.Stage {
      */
     onDestroyEvent() {
 
-        me.game.world.removeChildNow( me.game.world.getChildByName('HUD') );
+        me.game.world.removeChildNow( this.HUD );
         me.game.world.removeChildNow( me.game.world.getChildByName('TankEntity') );
         me.game.world.removeChildNow( me.game.world.getChildByName('EnemyEntity') );
 

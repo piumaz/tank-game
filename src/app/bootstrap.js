@@ -3,7 +3,7 @@ import screenfull from 'screenfull';
 import {me} from 'melonjs';
 
 import resources from './resources';
-
+import game from './game';
 import TitleScreen from './screens/title';
 import PlayScreen from './screens/play';
 
@@ -43,6 +43,13 @@ class Bootstrap {
 
     loaded() {
 
+        // load the texture atlas file
+        game.tank_sheet = new me.video.renderer.Texture(
+            me.loader.getJSON("tank_sheet"),
+            me.loader.getImage("tank_sheet")
+        );
+
+
         // set the title screen Object
         me.state.set(me.state.MENU, new TitleScreen());
 
@@ -62,31 +69,31 @@ class Bootstrap {
 
         // Mobile browser hacks
         if (me.device.isMobile && !navigator.isCocoonJS) {
-            // Prevent the webview from moving on a swipe
-            window.document.addEventListener("touchmove", function (e) {
-                e.preventDefault();
-                window.scroll(0, 0);
-                return false;
-            }, false);
 
-            // Scroll away mobile GUI
-
-            window.addEventListener("load",function() {
-                setTimeout(function(){
-                    // This hides the address bar:
-                    window.scrollTo(0, 1);
-                    me.video.onresize(null);
-                }, 0);
-            });
+            // // Prevent the webview from moving on a swipe
+            // window.document.addEventListener("touchmove", function (e) {
+            //     e.preventDefault();
+            //     window.scroll(0, 0);
+            //     return false;
+            // }, false);
+            //
+            // // Scroll away mobile GUI
+            // window.addEventListener("load",function() {
+            //     setTimeout(function(){
+            //         // This hides the address bar:
+            //         window.scrollTo(0, 1);
+            //         me.video.onresize(null);
+            //     }, 0);
+            // });
 
             // (function () {
             //     window.scrollTo(0, 1);
             //     me.video.onresize(null);
             // }).defer();
 
-            me.event.subscribe(me.event.WINDOW_ONRESIZE, function (e) {
-                window.scrollTo(0, 1);
-            });
+            // me.event.subscribe(me.event.WINDOW_ONRESIZE, function (e) {
+            //     window.scrollTo(0, 1);
+            // });
         }
 
         return bootstrap;

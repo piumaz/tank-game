@@ -7,7 +7,8 @@
     "start": "ts-node server.ts",
     "serve": "webpack-dev-server --mode development",
     "watch": "webpack --watch",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "dev": "npm run build && npm run start"
   },
   "engines": {
     "node": "13.0.0"
@@ -27,6 +28,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@colyseus/monitor": "^0.12.2",
     "colyseus": "^0.12.6",
     "colyseus.js": "^0.12.2",
     "core-js": "^3.6.5",

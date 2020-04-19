@@ -27,7 +27,7 @@ export default class HUD extends me.Container {
         this.anchorPoint.y = 0;
 
         // add our child score object at the top left corner
-        this.addChild(new ScoreItem(0, 10));
+        //this.addChild(new ScoreItem(0, 10));
 
 
 
@@ -66,8 +66,8 @@ export default class HUD extends me.Container {
 
             const shootSettings = {
                 name: 'ShootEntity',
-                x: this.width - 200,
-                y: this.height - 90,
+                x: 0,
+                y: 0,
                 width: 80,
                 height: 80,
 
@@ -81,8 +81,8 @@ export default class HUD extends me.Container {
 
             const rightGunSettings = {
                 name: 'RightGunEntity',
-                x: this.width - 90,
-                y: this.height - 90,
+                x: 0,
+                y: 0,
                 width: 80,
                 height: 80,
 
@@ -93,8 +93,8 @@ export default class HUD extends me.Container {
 
             const leftGunSettings = {
                 name: 'LeftGunEntity',
-                x: this.width - 310,
-                y: this.height - 90,
+                x: 0,
+                y: 0,
                 width: 80,
                 height: 80,
 
@@ -122,7 +122,10 @@ export default class HUD extends me.Container {
             this.JoystickLeft = this.addChild(JoystickLeft, 2);
         }
 
-        this.updateChildBounds();
+
+        this.repositionChild();
+
+
 
     }
 
@@ -147,7 +150,7 @@ export default class HUD extends me.Container {
             this.JoystickLeft.height = this.height;
         }
 
-
+        this.updateChildBounds();
 
     }
 }

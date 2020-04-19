@@ -1,0 +1,68 @@
+{"frames": [
+
+{
+	"filename": "barrelBlack_outline",
+	"frame": {"x":0,"y":0,"w":24,"h":58},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":58},
+	"sourceSize": {"w":24,"h":58}
+},
+{
+	"filename": "barrelRed_outline",
+	"frame": {"x":24,"y":0,"w":24,"h":58},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":58},
+	"sourceSize": {"w":24,"h":58}
+},
+{
+	"filename": "bullet",
+	"frame": {"x":48,"y":0,"w":20,"h":34},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":34},
+	"sourceSize": {"w":20,"h":34}
+},
+{
+	"filename": "fire",
+	"frame": {"x":0,"y":58,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "tankBlack_outline",
+	"frame": {"x":0,"y":122,"w":83,"h":78},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":78},
+	"sourceSize": {"w":83,"h":78}
+},
+{
+	"filename": "tankRed_outline",
+	"frame": {"x":0,"y":200,"w":83,"h":78},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":78},
+	"sourceSize": {"w":83,"h":78}
+},
+{
+	"filename": "tracks",
+	"frame": {"x":0,"y":278,"w":83,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":16},
+	"sourceSize": {"w":83,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "tank_sheet.png",
+	"format": "RGBA8888",
+	"size": {"w":83,"h":294},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:da830c14a4269468520f631d9d268f7f:e47064b3c7e01ed5339791e4528f1c44:062df334658a456f99314679cc3014e8$"
+}
+}

@@ -3,14 +3,14 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'colyseus';
-//import { monitor } from '@colyseus/monitor';
+import { monitor } from '@colyseus/monitor';
 
 // Import demo room handlers
 import { GameRoom } from "./src/server/rooms/game";
 
 
 const hostname = '0.0.0.0';
-const port = Number(process.env.PORT || 2657) + Number(process.env.NODE_APP_INSTANCE || 0);
+const port = Number(process.env.PORT || 5000) + Number(process.env.NODE_APP_INSTANCE || 0);
 const app = express();
 
 app.use(cors());
@@ -34,7 +34,7 @@ gameServer.define("game", GameRoom);
 app.use('/', express.static(path.join(__dirname, "build")));
 
 // (optional) attach web monitoring panel
-//app.use('/colyseus', monitor());
+app.use('/colyseus', monitor());
 
 gameServer.onShutdown(function(){
   console.log(`game server is going down.`);

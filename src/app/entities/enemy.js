@@ -30,6 +30,7 @@ export default class EnemyContainer extends TankContainer {
 
     setData(data) {
 
+        console.log('setData');
         const pNameEntity = this.getChildByName('PlayerNameEntity')[0];
 
         if (!pNameEntity) {

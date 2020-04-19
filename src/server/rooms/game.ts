@@ -69,7 +69,7 @@ export class State extends Schema {
 }
 
 export class GameRoom extends Room<State> {
-    maxClients = 4444;
+    maxClients = 12;
     options = null;
 
     onCreate (options) {

@@ -74,8 +74,11 @@ export default class TankContainer extends me.Container {
 
             me.input.registerPointerEvent('pointerdown', leftButton, this.rotateGunLeft.bind(this));
             me.input.registerPointerEvent('pointerup', leftButton, this.stopGun.bind(this));
+            me.input.registerPointerEvent('pointerleave', leftButton, this.stopGun.bind(this));
+
             me.input.registerPointerEvent('pointerdown', rightButton, this.rotateGunRight.bind(this));
             me.input.registerPointerEvent('pointerup', rightButton, this.stopGun.bind(this));
+            me.input.registerPointerEvent('pointerleave', rightButton, this.stopGun.bind(this));
         }
 
         // me.event.subscribe("gunleft", this.rotateGunLeft.bind(this));
@@ -102,9 +105,9 @@ export default class TankContainer extends me.Container {
                     name: 'TracksEntity',
                     width: 83,
                     height: 16,
-                    frameheight: 16,
-                    framewidth: 83,
-                    image: 'tracks',
+                    // frameheight: 16,
+                    // framewidth: 83,
+                    image: game.tank_sheet, region: 'tracks',
                     anchorPoint: {x:0,y:0},
                     angle: this.angle || 0
                 }
@@ -283,9 +286,7 @@ export default class TankContainer extends me.Container {
             y: 0.5,
             width: 83,
             height: 78,
-            frameheight: 78,
-            framewidth: 83,
-            image: this.name == 'TankContainer' ? 'tankRed_outline' : 'tankBlack_outline',
+            image: game.tank_sheet, region: this.name == 'TankContainer' ? 'tankRed_outline' : 'tankBlack_outline',
             anchorPoint: {x:0,y:0},
         };
 
@@ -295,7 +296,7 @@ export default class TankContainer extends me.Container {
             y: -10,
             width: 24,
             height: 58,
-            image: this.name == 'TankContainer' ? 'barrelRed_outline' : 'barrelBlack_outline',
+            image: game.tank_sheet, region: this.name == 'TankContainer' ? 'barrelRed_outline' : 'barrelBlack_outline',
             anchorPoint: {x:0,y:0}
         };
 
@@ -327,9 +328,9 @@ export default class TankContainer extends me.Container {
                 name: 'FireEntity',
                 width: 64,
                 height: 64,
-                frameheight: 64,
-                framewidth: 64,
-                image: 'fire4',
+                // frameheight: 64,
+                // framewidth: 64,
+                image: game.tank_sheet, region: 'fire',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0
             }
@@ -337,15 +338,15 @@ export default class TankContainer extends me.Container {
 
 
         me.game.world.addChild(me.pool.pull("BulletEntity",
-            this.pos.x + (this.width / 2) - 6,
-            this.pos.y + (this.height / 2) - 26,
+            this.pos.x + (this.width / 2) - 10,
+            this.pos.y + (this.height / 2) - 34,
             {
                 name: 'BulletEntity',
-                width: 12,
-                height: 12,
-                frameheight: 26,
-                framewidth: 12,
-                image: 'bullet',
+                width: 20,
+                height: 20    ,
+                framewidth: 20,
+                frameheight: 34,
+                image: game.tank_sheet, region: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
                 shootedBy: this.body.collisionType
@@ -728,6 +729,7 @@ class BulletEntity extends me.Entity {
         this.body.collisionType = me.collision.types.PROJECTILE_OBJECT;
 
 
+
         this.renderable.currentTransform
             .translate((this.renderable.width) / 2, (this.renderable.height) )
             .rotate(this.settings.angle)
@@ -738,8 +740,8 @@ class BulletEntity extends me.Entity {
 
     update (time) {
 
-        this.body.vel.x += this.body.accel.x * time / 1000 * (Math.sin(this.settings.angle));
-        this.body.vel.y -= this.body.accel.y * time / 1000 * (Math.cos(this.settings.angle));
+        //this.body.vel.x += this.body.accel.x * time / 1000 * (Math.sin(this.settings.angle));
+        //this.body.vel.y -= this.body.accel.y * time / 1000 * (Math.cos(this.settings.angle));
 
         this.body.update();
 
@@ -875,13 +877,13 @@ class PlayerNameEntity extends me.Renderable {
         this.name = 'PlayerNameEntity';
         this.playername = playername;
 
-        // create the font object
-        this.font = new me.BitmapFont(me.loader.getBinary('PressStart2P'), me.loader.getImage('PressStart2P'));
-
-        // font alignment to right, bottom
-        this.font.textAlign = "left";
-        this.font.textBaseline = "top";
-        this.font.alpha = 0.5;
+        // // create the font object
+        // this.font = new me.BitmapFont(me.loader.getBinary('PressStart2P'), me.loader.getImage('PressStart2P'));
+        //
+        // // font alignment to right, bottom
+        // this.font.textAlign = "left";
+        // this.font.textBaseline = "top";
+        // this.font.alpha = 0.5;
 
     }
 
@@ -898,7 +900,7 @@ class PlayerNameEntity extends me.Renderable {
      */
     draw(renderer) {
         // this.pos.x, this.pos.y are the relative position from the screen right bottom
-        this.font.draw(renderer, this.playername, this.pos.x, this.pos.y);
-        this.font.resize(0.75);
+        // this.font.draw(renderer, this.playername, this.pos.x, this.pos.y);
+        // this.font.resize(0.75);
     }
 }

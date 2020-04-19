@@ -5,13 +5,16 @@ class Mp {
     constructor() {
 
         //const host = '192.168.0.6';
-        // const host = '0.0.0.0';
+        const host = '0.0.0.0';
         // const host = 'localhost';
-        // const port = 2657;
-        // this.client = new Colyseus.Client(`ws://${host}:${port}`);
-        //
-        var HOST = location.origin.replace(/^http/, 'ws');
+        const PORT = 5000;
+        //this.client = new Colyseus.Client(`ws://${host}:${port}`);
 
+
+        let HOST = location.origin.replace(/^http/, 'ws');
+        if (HOST.indexOf(':') == -1) {
+            HOST += ':' + PORT;
+        }
         this.client = new Colyseus.Client(HOST);
 
 

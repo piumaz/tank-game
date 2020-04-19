@@ -17,7 +17,8 @@ export default class TitleScreen extends me.Stage {
 
         // position and scale to fit with the viewport size
         backgroundImage.anchorPoint.set(0, 0);
-        backgroundImage.scale(me.game.viewport.width / backgroundImage.width, me.game.viewport.height / backgroundImage.height);
+        // backgroundImage.scale(me.game.viewport.width / backgroundImage.width, me.game.viewport.height / backgroundImage.height);
+        backgroundImage.pos.set(me.game.viewport.width / 2, me.game.viewport.height / 2, 1);
 
         // add to the world container
         me.game.world.addChild(backgroundImage, 1);
