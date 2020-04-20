@@ -160,10 +160,10 @@ export default class TankContainer extends me.Container {
         }
 
 
-
         // move tank
-        this.pos.x += (this.speedx * Math.sin(this.angle));
-        this.pos.y -= (this.speedy * Math.cos(this.angle));
+        this.pos.x += (this.speed * Math.sin(this.angle));
+        this.pos.y -= (this.speed * Math.cos(this.angle));
+
 
 
         // add tracks
@@ -253,8 +253,9 @@ export default class TankContainer extends me.Container {
             x: 0,
             y: 0
         };
-        this.speedx = 0;
-        this.speedy = 0;
+
+        this.speed = 0;
+
         this.angle = 0;
         this.prevDegrees = 0;
 
@@ -309,9 +310,13 @@ export default class TankContainer extends me.Container {
         this.updateChildBounds();
     }
 
+    isDead() {
+        return game.mp.hit;
+    }
+
     shoot() {
 
-        if ( me.game.world.getChildByName('BulletEntity').length > 0) {
+        if ( this.isDead() || me.game.world.getChildByName('BulletEntity').length > 0) {
             return;
         }
 
@@ -371,16 +376,12 @@ export default class TankContainer extends me.Container {
         const tank = this.getChildByName('TankEntity')[0];
         const gun = this.getChildByName('GunEntity')[0];
 
+        if (this.name == 'TankContainer') {
+            me.device.vibrate(1000);
+        }
+
         tank.renderable.flicker(500);
-        gun.renderable.flicker(500, () => {
-
-            if (this.name == 'TankContainer') {
-                me.device.vibrate(1000);
-                this.respawn();
-            }
-
-
-        });
+        gun.renderable.flicker(500);
 
 
     }
@@ -389,15 +390,11 @@ export default class TankContainer extends me.Container {
 
         me.audio.play("cling");
 
-        this.pos.x =  Math.random() * (me.game.world.width - 300) + 300;
-        this.pos.y = Math.random() * (me.game.world.height - 300) + 300;
-
         // send multiplayer data
-        game.mp = {...game.mp, ...{
-                x: this.pos.x,
-                y: this.pos.y,
-            }};
+        game.mp.hit = false;
+        game.mp.respawn = false;
         Mp.send({...game.mp});
+
 
     }
 
@@ -485,9 +482,11 @@ export default class TankContainer extends me.Container {
 
     start(e) {
 
+        if (this.isDead()) return;
+
         this.isStarted = true;
 
-        me.audio.playTrack("tank", 0.5);
+        //me.audio.playTrack("tank", 0.5);
 
 
         this.centerPointer = {
@@ -495,8 +494,7 @@ export default class TankContainer extends me.Container {
             y: e.pos.y
         };
 
-        this.speedx = 0;
-        this.speedy = 0;
+        this.speed = 0;
 
 
     }
@@ -507,8 +505,7 @@ export default class TankContainer extends me.Container {
 
         me.audio.stopTrack("tank");
 
-        this.speedx = 0;
-        this.speedy = 0;
+        this.speed = 0;
 
     }
 
@@ -516,14 +513,15 @@ export default class TankContainer extends me.Container {
 
         if (!this.isStarted) return;
 
-        var position = e.pos;
-        var center = this.centerPointer;
+        const position = e.pos;
+        const center = this.centerPointer;
 
         // angle in radians
-        var radians = Math.atan2(position.y - center.y, position.x - center.x);
+        const radians = Math.atan2(position.y - center.y, position.x - center.x);
 
         // angle in degrees
-        var degrees = Math.atan2(position.y - center.y, position.x - center.x) * 180 / Math.PI;
+        let degrees = Math.atan2(position.y - center.y, position.x - center.x) * 180 / Math.PI;
+        degrees = Math.floor(degrees);
 
         degrees += 90;
 
@@ -533,34 +531,35 @@ export default class TankContainer extends me.Container {
             degrees += 360;
         }
 
+        const totDegrees = (degrees - this.prevDegrees);
+
+        const tank = this.getChildByName('TankEntity')[0];
+        const gun = this.getChildByName('GunEntity')[0];
 
 
+        this.speed = 2;
 
-        if (this.speedx == 0) {
-            this.speedx = 2;
-            this.speedy = 2;
+        // reverse gear?
+        if (
+            (totDegrees > 120 && totDegrees < 240) ||
+            (totDegrees < -120 && totDegrees > -240)
+        ) {
+            tank.centerRotate(180);
+            gun.centerRotate(180);
+
+            this.angle += 180 * (Math.PI / 180);
+            this.angleGun += 180 * (Math.PI / 180);
         }
 
-        //console.log('degree', Math.floor(degrees));
 
-        if ((degrees - this.prevDegrees) > 120 && (degrees - this.prevDegrees) < 240) {
-            this.speedx = -2;
-            this.speedy = -2;
 
-            //console.log('inversione');
-        } else {
-            const tank = this.getChildByName('TankEntity')[0];
-            tank.centerRotate(degrees - this.prevDegrees);
+        tank.centerRotate(totDegrees);
+        gun.centerRotate(totDegrees);
 
-            const gun = this.getChildByName('GunEntity')[0];
-            gun.centerRotate(degrees - this.prevDegrees);
+        this.angle += totDegrees * (Math.PI / 180);
+        this.angleGun += totDegrees * (Math.PI / 180);
 
-            this.angle += (degrees - this.prevDegrees) * (Math.PI / 180);
-            this.angleGun += (degrees - this.prevDegrees) * (Math.PI / 180);
-
-            this.prevDegrees = degrees;
-        }
-
+        this.prevDegrees = degrees;
 
 
         game.mp = {...game.mp, ...{
@@ -570,16 +569,8 @@ export default class TankContainer extends me.Container {
             }};
 
 
-
-
     }
 
-    // centerRotate (deg) {
-    //     this
-    //         .translate((this.pos.x + this.width) / 2, (this.pos.y + this.width) / 2)
-    //         .rotate(deg * Math.PI / 180)
-    //         .translate(-(this.pos.x + this.width) / 2, -(this.pos.y + this.width) / 2);
-    // }
 
 }
 
@@ -740,8 +731,8 @@ class BulletEntity extends me.Entity {
 
     update (time) {
 
-        //this.body.vel.x += this.body.accel.x * time / 1000 * (Math.sin(this.settings.angle));
-        //this.body.vel.y -= this.body.accel.y * time / 1000 * (Math.cos(this.settings.angle));
+        this.body.vel.x += this.body.accel.x * time / 1000 * (Math.sin(this.settings.angle));
+        this.body.vel.y -= this.body.accel.y * time / 1000 * (Math.cos(this.settings.angle));
 
         this.body.update();
 
@@ -806,10 +797,6 @@ class BulletEntity extends me.Entity {
             // send multiplayer data
             game.mp.hit = true;
             Mp.send({...game.mp});
-
-            setTimeout(() => {
-                game.mp.hit = false;
-            }, 100);
 
             return true;
 

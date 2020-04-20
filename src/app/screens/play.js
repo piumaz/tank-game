@@ -64,7 +64,10 @@ export default class PlayScreen extends me.Stage {
                 //console.log("player change!", player);
 
                 if (Mp.sessionId() === sessionId) {
-                    // console.log("sono io, nulla");
+                    // console.log("sono io");
+                    if(player.respawn) {
+                        players[sessionId].respawn();
+                    }
                     return;
                 }
 

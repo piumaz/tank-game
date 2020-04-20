@@ -29,6 +29,9 @@ export class Player extends Schema {
     @type("boolean")
     hit = false;
 
+    @type("boolean")
+    respawn = false;
+
     @type("number")
     score = 0;
 
@@ -39,7 +42,6 @@ export class State extends Schema {
     @type({ map: Player })
     players = new MapSchema<Player>();
 
-    something = "This attribute won't be sent to the client-side";
 
     createPlayer (id: string, x, y) {
 
@@ -59,8 +61,6 @@ export class State extends Schema {
 
     movePlayer (id: string, data: any) {
 
-        // console.log('move', this.players[ id ], data);
-
         for (let i in data) {
             this.players[ id ][ i ] = data[i];
         }
@@ -69,7 +69,7 @@ export class State extends Schema {
 }
 
 export class GameRoom extends Room<State> {
-    maxClients = 12;
+
     options = null;
 
     onCreate (options) {
@@ -85,15 +85,17 @@ export class GameRoom extends Room<State> {
         return true;
     }
 
+    getRespawnPosition() {
+        return {
+            x: Math.random() * ((this.options.width - 300) - 300) + 300,
+            y: Math.random() * ((this.options.height - 300) - 300) + 300
+        }
+    }
+
     onJoin (client: Client) {
 
-        let player_x, player_y;
-
-        // Math.random() * (max - min) + min;
-        player_x =  Math.random() * (this.options.width - 300) + 300;
-        player_y = Math.random() * (this.options.height - 300) + 300;
-
-        this.state.createPlayer(client.sessionId, player_x, player_y);
+        const pos = this.getRespawnPosition();
+        this.state.createPlayer(client.sessionId, pos.x, pos.y);
 
     }
 
@@ -104,6 +106,16 @@ export class GameRoom extends Room<State> {
     onMessage (client, data) {
 
         if (typeof data === 'object') {
+
+            if(data.hit) {
+                //respawn
+                const pos = this.getRespawnPosition();
+                data.x = pos.x;
+                data.y = pos.y;
+                data.hit = false;
+                data.respawn = true;
+            }
+
             this.state.movePlayer(client.sessionId, data);
         }
 

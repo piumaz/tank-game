@@ -146,7 +146,7 @@ export default class HUD extends me.Container {
             this.LeftGunEntity.pos.y = this.height - 90;
 
         } else {
-            this.JoystickLeft.width = this.width / 2;
+            this.JoystickLeft.width = this.width;
             this.JoystickLeft.height = this.height;
         }
 

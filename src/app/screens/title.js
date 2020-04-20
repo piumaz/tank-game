@@ -17,8 +17,8 @@ export default class TitleScreen extends me.Stage {
 
         // position and scale to fit with the viewport size
         backgroundImage.anchorPoint.set(0, 0);
-        // backgroundImage.scale(me.game.viewport.width / backgroundImage.width, me.game.viewport.height / backgroundImage.height);
-        backgroundImage.pos.set(me.game.viewport.width / 2, me.game.viewport.height / 2, 1);
+        backgroundImage.scale(me.game.viewport.width / backgroundImage.width, me.game.viewport.height / backgroundImage.height);
+        //backgroundImage.pos.set(me.game.viewport.width / 2, me.game.viewport.height / 2, 1);
 
         // add to the world container
         me.game.world.addChild(backgroundImage, 1);
@@ -58,7 +58,6 @@ export default class TitleScreen extends me.Stage {
      * action to perform when leaving this screen (state change)
      */
     onDestroyEvent() {
-        console.log('destroy');
         me.event.unsubscribe(me.event.WINDOW_ONORIENTATION_CHANGE, this.subResize);
 
         //me.input.unbindKey(me.input.KEY.ENTER);
