@@ -383,18 +383,23 @@ export default class TankContainer extends me.Container {
         tank.renderable.flicker(500);
         gun.renderable.flicker(500);
 
-
+        if (this.name == 'EnemyContainer') {
+            this.pos.x = -300;
+            this.pos.y = -300;
+        }
     }
 
-    respawn() {
+    respawn(x, y) {
 
         me.audio.play("cling");
 
-        // send multiplayer data
-        game.mp.hit = false;
-        game.mp.respawn = false;
-        Mp.send({...game.mp});
+        this.pos.x = x;
+        this.pos.y = y;
 
+        // send multiplayer data
+        game.mp.respawn = false;
+        game.mp.hit = false;
+        Mp.send({...game.mp});
 
     }
 
@@ -544,12 +549,17 @@ export default class TankContainer extends me.Container {
             (totDegrees > 120 && totDegrees < 240) ||
             (totDegrees < -120 && totDegrees > -240)
         ) {
+            console.log('retro');
             tank.centerRotate(180);
             gun.centerRotate(180);
 
-            this.angle += 180 * (Math.PI / 180);
             this.angleGun += 180 * (Math.PI / 180);
         }
+
+
+
+
+
 
 
 
@@ -802,50 +812,6 @@ class BulletEntity extends me.Entity {
 
         }
 
-
-/*
-        if (this.ancestor.body.collisionType === me.collision.types.PLAYER_OBJECT) {
-            // shoot by player
-            if (other.body.collisionType === me.collision.types.ENEMY_OBJECT) {
-                console.log('colpito il nemico');
-
-                game.data.score += 10;
-
-                if(this.ancestor) {
-                    this.ancestor.removeChild(this);
-                }
-
-                other.explode();
-
-
-                return true;
-            }
-
-        } else if (this.ancestor.body.collisionType === me.collision.types.ENEMY_OBJECT) {
-            // shoot by enemy
-            if (other.body.collisionType === me.collision.types.PLAYER_OBJECT) {
-                console.log('colpito dal nemico');
-
-                if(this.ancestor) {
-                    this.ancestor.removeChild(this);
-                }
-
-                other.explode();
-
-
-                // send multiplayer data
-                game.mp.hit = true;
-                Mp.send({...game.mp});
-
-                setTimeout(() => {
-                    game.mp.hit = false;
-                }, 100);
-
-                return true;
-            }
-        }*/
-
-        game.mp.hit = false;
 
         return false;
     }

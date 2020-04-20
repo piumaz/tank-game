@@ -109,6 +109,7 @@ export class GameRoom extends Room<State> {
 
             if(data.hit) {
                 //respawn
+                console.log('respawn');
                 const pos = this.getRespawnPosition();
                 data.x = pos.x;
                 data.y = pos.y;

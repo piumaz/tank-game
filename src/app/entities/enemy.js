@@ -50,9 +50,25 @@ export default class EnemyContainer extends TankContainer {
         const tank = this.getChildByName('TankEntity')[0];
         const gun = this.getChildByName('GunEntity')[0];
 
+        const totDegrees = (data.tankDegrees - this.prevDegrees);
+
+
+        // reverse gear?
+        if (
+            (totDegrees > 120 && totDegrees < 240) ||
+            (totDegrees < -120 && totDegrees > -240)
+        ) {
+            console.log('retro');
+            tank.centerRotate(180);
+            gun.centerRotate(180);
+
+            this.angleGun += 180 * (Math.PI / 180);
+        }
+
+
         if (this.prevDegrees !== data.tankDegrees) {
-            tank.centerRotate( data.tankDegrees - this.prevDegrees );
-            gun.centerRotate( data.tankDegrees - this.prevDegrees );
+            tank.centerRotate( totDegrees );
+            gun.centerRotate( totDegrees );
         }
         this.prevDegrees = data.tankDegrees;
 
@@ -89,7 +105,7 @@ export default class EnemyContainer extends TankContainer {
                 height: 64,
                 frameheight: 64,
                 framewidth: 64,
-                image: 'fire4',
+                image: game.tank_sheet, region: 'fire',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0
             }
@@ -105,7 +121,7 @@ export default class EnemyContainer extends TankContainer {
                 height: 12,
                 frameheight: 26,
                 framewidth: 12,
-                image: 'bullet',
+                image: game.tank_sheet, region: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
                 shootedBy: this.body.collisionType

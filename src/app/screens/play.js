@@ -65,8 +65,8 @@ export default class PlayScreen extends me.Stage {
 
                 if (Mp.sessionId() === sessionId) {
                     // console.log("sono io");
-                    if(player.respawn) {
-                        players[sessionId].respawn();
+                    if (player.respawn) {
+                        players[sessionId].respawn(player.x, player.y);
                     }
                     return;
                 }

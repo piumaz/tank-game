@@ -1,5 +1,4 @@
-import 'core-js';
-import screenfull from 'screenfull';
+//import 'core-js';
 import {me} from 'melonjs';
 
 import resources from './resources';
@@ -23,13 +22,7 @@ class Bootstrap {
             me.debug.renderHitBox = true;
         }
 
-/*        try {
-            if (screenfull.isEnabled) {
-                screenfull.request();
-            }
-        } catch(er) {
-            console.log(er);
-        }*/
+
 
         // Initialize the audio.
         me.audio.init("mp3,ogg");
