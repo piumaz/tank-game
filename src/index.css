@@ -37,12 +37,32 @@ body {
     position: relative;
 }
 
-#wrapper input {
-    width: 200px;
+
+#ui {
+    width: 80%;
     left: 50%;
     top: 50%;
     font-size: 1rem;
-    transform: translate(-50%, calc(-50% - 40px));
+    transform: translate(-50%, calc(-50%));
     position: absolute;
     z-index: 2;
+    display:none;
+}
+
+#ui input {
+    width: 100%;
+    font-family: "Courier New", Courier, monospace;
+    font-size:1.5rem;
+    border:1px solid #333;
+    padding:5px;
+}
+#ui button {
+    width: 100%;
+    flex:1;
+    background-color:#333;
+    color:#CCC;
+    border:1px solid #333;
+    font-family: "Courier New", Courier, monospace;
+    font-size:1.2rem;
+    font-weight: bold;
 }

@@ -19,6 +19,15 @@
         <!-- Canvas placeholder -->
         <div id="wrapper">
             <div id="screen"></div>
+
+            <div id="ui">
+                <input type="text"
+                       id="playername"
+                       placeholder="Insert your name..."
+                       maxlength="20"
+                       pattern="[a-zA-Z0-9_\-]+" />
+                <button type="button" id="btn-play">PLAY</button>
+            </div>
         </div>
 
         <!-- es5/es6 shim for legacy browsers" -->

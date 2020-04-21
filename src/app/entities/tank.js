@@ -31,7 +31,7 @@ export default class TankContainer extends me.Container {
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.4);
 
         //player name
-        this.addChild(me.pool.pull("PlayerNameEntity", this.width, -10, this.playername), 20);
+        this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, this.playername), 20);
 
         //this.tint = new me.Color(128, 128, 128);
 
@@ -366,10 +366,11 @@ export default class TankContainer extends me.Container {
             game.mp.shoot = false;
         }, 100);
 
-
     }
 
     explode() {
+
+        me.game.viewport.shake(10, 500, me.game.viewport.AXIS.BOTH);
 
         this.stop(null);
 
@@ -760,7 +761,7 @@ class BulletEntity extends me.Entity {
             }
         }
 
-        //return true;
+        return this._super(me.Entity, "update", [time]);
     }
 
     onCollision (response, other) {
@@ -830,14 +831,17 @@ class PlayerNameEntity extends me.Renderable {
         this.name = 'PlayerNameEntity';
         this.playername = playername;
 
-        // // create the font object
-        // this.font = new me.BitmapFont(me.loader.getBinary('PressStart2P'), me.loader.getImage('PressStart2P'));
-        //
-        // // font alignment to right, bottom
-        // this.font.textAlign = "left";
-        // this.font.textBaseline = "top";
-        // this.font.alpha = 0.5;
 
+
+        // create the font object
+        this.font = new me.BitmapText(x, y, {font:"PressStart2P", text:"------"});
+
+        // font alignment to right, bottom
+        this.font.textAlign = "left";
+        this.font.textBaseline = "top";
+        this.font.alpha = 0.5;
+
+        console.log(playername);
     }
 
     /**
@@ -848,12 +852,9 @@ class PlayerNameEntity extends me.Renderable {
         return true;
     }
 
-    /**
-     * draw the player name
-     */
     draw(renderer) {
         // this.pos.x, this.pos.y are the relative position from the screen right bottom
-        // this.font.draw(renderer, this.playername, this.pos.x, this.pos.y);
-        // this.font.resize(0.75);
+        this.font.draw(renderer, this.playername, this.pos.x, this.pos.y);
+        this.font.resize(0.75);
     }
 }

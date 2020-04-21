@@ -25,7 +25,7 @@ export default class EnemyContainer extends TankContainer {
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
 
-
+        this.alwaysUpdate = true;
     }
 
     setData(data) {
@@ -36,7 +36,7 @@ export default class EnemyContainer extends TankContainer {
         if (!pNameEntity) {
             //player name
             console.log('aggiungo il nome');
-            this.addChild(me.pool.pull("PlayerNameEntity", this.width, -10, data.playername), 20);
+            this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, data.playername), 20);
         }
 
 

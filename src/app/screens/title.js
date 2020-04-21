@@ -24,24 +24,17 @@ export default class TitleScreen extends me.Stage {
         me.game.world.addChild(backgroundImage, 1);
 
 
-        me.game.world.addChild( new TextInput((me.game.viewport.width / 2), (me.game.viewport.height / 2), {
-            type: 'text',
-            id: 'playername',
-            placeholder: 'Insert your name...',
-            maxlength: 20,
-            pattern: '[a-zA-Z0-9_\-]+'
-        }));
+        const ui = document.getElementById('ui');
+        ui.style.display = 'flex';
 
+        const btn = document.getElementById('btn-play');
+        btn.onclick = (e) => {
+            game.mp.playername = document.getElementById('playername').value || 'anonymous';
+            me.audio.play("cling");
+            me.state.change(me.state.PLAY);
 
-
-        // button enter
-        me.game.world.addChild(new UiButtonEnter((me.game.viewport.width / 2) , me.game.viewport.height / 2 , {
-            name: 'UiButtonEnter',
-            width: 108,
-            height: 48,
-            image: 'start',
-        }));
-
+            ui.style.display = 'none';
+        }
 
         this.subResize = (e) => {
             console.log('change rotation title');
@@ -63,29 +56,5 @@ export default class TitleScreen extends me.Stage {
         //me.input.unbindKey(me.input.KEY.ENTER);
         //me.input.unbindPointer(me.input.pointer.LEFT);
 
-    }
-}
-
-class UiButtonEnter extends me.GUI_Object {
-    /**
-     * constructor
-     */
-    init(x, y, settings) {
-
-        // call the constructor
-        this._super(me.GUI_Object, 'init', [x, y, settings]);
-
-    }
-
-    // output something in the console
-    // when the object is clicked
-    onClick(event) {
-
-        game.mp.playername = document.getElementById('playername').value || 'anonymous';
-        me.audio.play("cling");
-        me.state.change(me.state.PLAY);
-
-        // don't propagate the event
-        return false;
     }
 }
