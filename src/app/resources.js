@@ -1,6 +1,11 @@
 const resources = [
     // audio
     {
+        "name": "Metallica_Seek_and_Destroy_Lyrics",
+        "type": "audio",
+        "src": "assets/bgm/"
+    },
+    {
         "name": "gun_battle_sound-ReamProductions",
         "type": "audio",
         "src": "assets/bgm/"
@@ -28,10 +33,11 @@ const resources = [
 
     // background
     {
-        "name": "title_screen",
+        "name": "title_screen3",
         "type": "image",
-        "src": "assets/img/gui/title_screen.jpeg"
+        "src": "assets/img/gui/title_screen3.jpg"
     },
+
 
     // map
     {

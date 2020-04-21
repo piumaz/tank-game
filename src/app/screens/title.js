@@ -9,9 +9,14 @@ export default class TitleScreen extends me.Stage {
      */
     onResetEvent() {
 
+        // play the audio track
+        me.audio.play("Metallica_Seek_and_Destroy_Lyrics", 0, null, 1);
+        me.audio.fade("Metallica_Seek_and_Destroy_Lyrics", 1, 0, 10000);
+
+
         // title screen
         var backgroundImage = new me.Sprite(0, 0, {
-                image: me.loader.getImage('title_screen'),
+                image: me.loader.getImage('title_screen3'),
             }
         );
 
@@ -24,8 +29,8 @@ export default class TitleScreen extends me.Stage {
         me.game.world.addChild(backgroundImage, 1);
 
 
-        const ui = document.getElementById('ui');
-        ui.style.display = 'flex';
+        const titlescreen = document.getElementById('titlescreen');
+        titlescreen.style.display = 'block';
 
         const btn = document.getElementById('btn-play');
         btn.onclick = (e) => {
@@ -33,7 +38,7 @@ export default class TitleScreen extends me.Stage {
             me.audio.play("cling");
             me.state.change(me.state.PLAY);
 
-            ui.style.display = 'none';
+            titlescreen.style.display = 'none';
         }
 
         this.subResize = (e) => {
