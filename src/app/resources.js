@@ -66,6 +66,18 @@ const resources = [
     // sprite
     {name: "tank_sheet", type: "json", src: "assets/img/sprite/tank_sheet.json"},
     {name: "tank_sheet", type: "image", src: "assets/img/sprite/tank_sheet.png"},
+
+    {
+        "name": "tank",
+        "type": "image",
+        "src": "assets/img/sprite/tank.png"
+    },
+    {
+        "name": "barrel",
+        "type": "image",
+        "src": "assets/img/sprite/barrel.png"
+    },
+
     {
         "name": "spinning_coin_gold",
         "type": "image",

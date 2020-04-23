@@ -7,7 +7,7 @@ import Mp from "../multiplayer";
  */
 export default class TankContainer extends me.Container {
 
-    init(x, y, playername, w, h) {
+    init(x, y, w, h) {
 
         // w = 83;
         // h = 78;
@@ -18,7 +18,7 @@ export default class TankContainer extends me.Container {
         // give a name
         this.name = "TankContainer";
 
-        this.playername = playername;
+        this.playername = null;
 
 
         this.setVar();
@@ -30,19 +30,31 @@ export default class TankContainer extends me.Container {
         // set the display to follow our position on both axis
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.4);
 
-        //player name
-        this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, this.playername), 20);
-
         //this.tint = new me.Color(128, 128, 128);
 
         game.mp = {...game.mp, ...{
             x: this.pos.x,
-            y: this.pos.y,
-            playername: this.playername
+            y: this.pos.y
         }};
 
     }
 
+    getPlayername() {
+        return this.playername;
+    }
+
+    setPlayername(playername) {
+
+        this.playername = playername;
+
+        //player name
+        this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, this.playername), 20);
+
+        game.mp = {...game.mp, ...{
+                playername: this.playername
+            }};
+
+    }
 
     setUiInteraction() {
 
@@ -354,7 +366,8 @@ export default class TankContainer extends me.Container {
                 image: game.tank_sheet, region: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
-                shootedBy: this.body.collisionType
+                shootedBy: this.body.collisionType,
+                shootedByPlayername: this.getPlayername()
             }
         ), 4);
 
@@ -492,7 +505,7 @@ export default class TankContainer extends me.Container {
 
         this.isStarted = true;
 
-        //me.audio.playTrack("tank", 0.5);
+        me.audio.playTrack("tank", 0.5);
 
 
         this.centerPointer = {
@@ -807,6 +820,7 @@ class BulletEntity extends me.Entity {
 
             // send multiplayer data
             game.mp.hit = true;
+            game.mp.hitBy = this.settings.shootedByPlayername;
             Mp.send({...game.mp});
 
             return true;
@@ -841,7 +855,6 @@ class PlayerNameEntity extends me.Renderable {
         this.font.textBaseline = "top";
         this.font.alpha = 0.5;
 
-        console.log(playername);
     }
 
     /**

@@ -78,7 +78,6 @@ export default class HUD extends me.Container {
             // me.pool.register("ShootEntity", UiBtnEntity);
             this.ShootEntity = this.addChild(me.pool.pull("UiBtnEntity", shootSettings.x, shootSettings.y, shootSettings), 3);
 
-
             const rightGunSettings = {
                 name: 'RightGunEntity',
                 x: 0,
@@ -125,8 +124,6 @@ export default class HUD extends me.Container {
 
         this.repositionChild();
 
-
-
     }
 
     repositionChild() {
@@ -138,6 +135,7 @@ export default class HUD extends me.Container {
 
             this.ShootEntity.pos.x = this.width - 200;
             this.ShootEntity.pos.y = this.height - 90;
+
 
             this.RightGunEntity.pos.x = this.width - 90;
             this.RightGunEntity.pos.y = this.height - 90;

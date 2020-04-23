@@ -5,14 +5,14 @@ import Mp from "../multiplayer";
 
 export default class EnemyContainer extends TankContainer {
 
-    init(x, y, playername, w, h) {
+    init(x, y, w, h) {
         // call the constructor
         this._super(me.Container, 'init', [x, y, w, h]);
 
         // give a name
         this.name = "EnemyContainer";
 
-        this.playername = playername;
+        this.playername = null;
 
         this.setVar();
         this.mount();
@@ -28,15 +28,24 @@ export default class EnemyContainer extends TankContainer {
         this.alwaysUpdate = true;
     }
 
+    setPlayername(playername) {
+
+        this.playername = playername;
+
+        //player name
+        this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, this.playername), 20);
+
+    }
+
     setData(data) {
 
         console.log('setData');
         const pNameEntity = this.getChildByName('PlayerNameEntity')[0];
 
-        if (!pNameEntity) {
+        if (!pNameEntity && !this.getPlayername()) {
             //player name
             console.log('aggiungo il nome');
-            this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, data.playername), 20);
+            this.setPlayername(data.playername);
         }
 
 
@@ -124,7 +133,8 @@ export default class EnemyContainer extends TankContainer {
                 image: game.tank_sheet, region: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
-                shootedBy: this.body.collisionType
+                shootedBy: this.body.collisionType,
+                shootedByPlayername: this.getPlayername()
             }
         ), 15);
 

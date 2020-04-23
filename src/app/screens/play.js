@@ -1,6 +1,7 @@
 import {me} from 'melonjs';
 import game from './../game';
 import Mp from "../multiplayer";
+import MessagesContainer from "../entities/messages";
 import HUD from "../entities/HUD";
 import TankContainer from "../entities/tank";
 import EnemyContainer from "../entities/enemy";
@@ -15,8 +16,11 @@ export default class PlayScreen extends me.Stage {
         const players = {};
 
         me.pool.register("HUD", HUD);
+        me.pool.register("MessagesContainer", MessagesContainer);
+
         me.pool.register("TankContainer", TankContainer);
         me.pool.register("EnemyContainer", EnemyContainer);
+
 
         me.pool.register("CoinEntity", CoinEntity);
 
@@ -32,6 +36,7 @@ export default class PlayScreen extends me.Stage {
 
 
         this.HUD = me.game.world.addChild(me.pool.pull("HUD", 0, 0));
+        this.MessagesContainer = me.game.world.addChild(me.pool.pull("MessagesContainer"));
 
 
         // join server
@@ -42,19 +47,18 @@ export default class PlayScreen extends me.Stage {
 
             Mp.onPlayerAdd((player, sessionId) => {
 
-                console.log('player add', player.x , player.y);
-
+                // console.log('player add', player.x , player.y);
                 if (Mp.sessionId() === sessionId) {
-                    players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, game.mp.playername, 83, 78), 5);
-
+                    players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, 83, 78), 5);
                 } else {
-                    players[sessionId] = me.game.world.addChild(me.pool.pull("EnemyContainer", player.x, player.y, player.playername, 83, 78), 5);
+                    players[sessionId] = me.game.world.addChild(me.pool.pull("EnemyContainer", player.x, player.y, 83, 78), 5);
                 }
 
             });
 
             Mp.onPlayerRemove((player, sessionId) => {
-                console.log("player left!", sessionId);
+                //console.log("player left!", sessionId);
+                this.MessagesContainer.addMessage(player.playername + ' left the game');
                 me.game.world.removeChild( players[sessionId] );
                 delete players[sessionId];
 
@@ -63,16 +67,27 @@ export default class PlayScreen extends me.Stage {
             Mp.onPlayerChange((player, sessionId) => {
                 //console.log("player change!", player);
 
+                if (player.respawn) {
+                    this.MessagesContainer.addMessage(player.playername + ' was killed by ' + player.hitBy);
+                }
+
+                if (player.playername && !players[sessionId].getPlayername()) {
+                    players[sessionId].setPlayername(player.playername);
+                    this.MessagesContainer.addMessage(player.playername + ' join the game');
+                }
+
                 if (Mp.sessionId() === sessionId) {
                     // console.log("sono io");
                     if (player.respawn) {
                         players[sessionId].respawn(player.x, player.y);
                     }
-                    return;
+
+                } else {
+
+                    players[sessionId].setData(player);
+
                 }
 
-
-                players[sessionId].setData(player);
 
             });
 
@@ -81,7 +96,7 @@ export default class PlayScreen extends me.Stage {
 
         me.event.subscribe(me.event.VIEWPORT_ONRESIZE, (e) => {
 
-            console.log('change rotation', me.game.viewport.width, me.game.viewport.height);
+            //console.log('change rotation', me.game.viewport.width, me.game.viewport.height);
 
             if (this.HUD) {
                 this.HUD.width = me.game.viewport.width;

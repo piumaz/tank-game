@@ -29,6 +29,9 @@ export class Player extends Schema {
     @type("boolean")
     hit = false;
 
+    @type("string")
+    hitBy = null;
+
     @type("boolean")
     respawn = false;
 
@@ -49,7 +52,7 @@ export class State extends Schema {
 
         player.x = x;
         player.y = y;
-        player.playername = id;
+        // player.playername = id;
 
         this.players[ id ] = player;
 

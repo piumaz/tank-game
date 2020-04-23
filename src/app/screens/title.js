@@ -35,6 +35,8 @@ export default class TitleScreen extends me.Stage {
         const btn = document.getElementById('btn-play');
         btn.onclick = (e) => {
             game.mp.playername = document.getElementById('playername').value || 'anonymous';
+
+            me.audio.stop("Metallica_Seek_and_Destroy_Lyrics");
             me.audio.play("cling");
             me.state.change(me.state.PLAY);
 
@@ -57,6 +59,7 @@ export default class TitleScreen extends me.Stage {
      */
     onDestroyEvent() {
         me.event.unsubscribe(me.event.WINDOW_ONORIENTATION_CHANGE, this.subResize);
+
 
         //me.input.unbindKey(me.input.KEY.ENTER);
         //me.input.unbindPointer(me.input.pointer.LEFT);
