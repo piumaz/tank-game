@@ -7,7 +7,7 @@ import TankContainer from "../entities/tank";
 import EnemyContainer from "../entities/enemy";
 import CoinEntity from "../entities/entities";
 
-import TestContainer from "../entities/test";
+//import TestContainer from "../entities/test";
 
 export default class PlayScreen extends me.Stage {
     /**
