@@ -67,6 +67,7 @@ const resources = [
     {name: "tank_sheet", type: "json", src: "assets/img/sprite/tank_sheet.json"},
     {name: "tank_sheet", type: "image", src: "assets/img/sprite/tank_sheet.png"},
 
+    /*
     {
         "name": "tank",
         "type": "image",
@@ -77,6 +78,22 @@ const resources = [
         "type": "image",
         "src": "assets/img/sprite/barrel.png"
     },
+    {
+        "name": "fire",
+        "type": "image",
+        "src": "assets/img/sprite/fire.png"
+    },
+    {
+        "name": "tracks",
+        "type": "image",
+        "src": "assets/img/sprite/tracks.png"
+    },
+    {
+        "name": "bullet",
+        "type": "image",
+        "src": "assets/img/sprite/bullet.png"
+    },
+    */
 
     {
         "name": "spinning_coin_gold",

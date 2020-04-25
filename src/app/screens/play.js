@@ -7,6 +7,8 @@ import TankContainer from "../entities/tank";
 import EnemyContainer from "../entities/enemy";
 import CoinEntity from "../entities/entities";
 
+import TestContainer from "../entities/test";
+
 export default class PlayScreen extends me.Stage {
     /**
      * action to perform on state change
@@ -38,7 +40,6 @@ export default class PlayScreen extends me.Stage {
         this.HUD = me.game.world.addChild(me.pool.pull("HUD", 0, 0));
         this.MessagesContainer = me.game.world.addChild(me.pool.pull("MessagesContainer"));
 
-
         // join server
         Mp.join({
             width:  me.game.world.width,
@@ -49,7 +50,9 @@ export default class PlayScreen extends me.Stage {
 
                 // console.log('player add', player.x , player.y);
                 if (Mp.sessionId() === sessionId) {
-                    players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, 83, 78), 5);
+                    //me.game.world.addChild( new TestContainer(player.x, player.y, 160, 160), 5);
+
+                    players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, 160, 160), 5);
                 } else {
                     players[sessionId] = me.game.world.addChild(me.pool.pull("EnemyContainer", player.x, player.y, 83, 78), 5);
                 }

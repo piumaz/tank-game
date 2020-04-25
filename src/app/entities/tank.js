@@ -48,7 +48,7 @@ export default class TankContainer extends me.Container {
         this.playername = playername;
 
         //player name
-        this.addChild(me.pool.pull("PlayerNameEntity", this.width + 10, -20, this.playername), 20);
+        this.addChild(me.pool.pull("PlayerNameEntity", this.width - 35, 35, this.playername), 20);
 
         game.mp = {...game.mp, ...{
                 playername: this.playername
@@ -112,14 +112,15 @@ export default class TankContainer extends me.Container {
 
             const track = me.pool.pull("TracksEntity",
                 this.pos.x,
-                this.pos.y + this.height,
+                this.pos.y + 60,
                 {
                     name: 'TracksEntity',
-                    width: 83,
-                    height: 16,
+                    width: 160,
+                    height: 17,
                     // frameheight: 16,
                     // framewidth: 83,
                     image: game.tank_sheet, region: 'tracks',
+                    //image: 'tracks',
                     anchorPoint: {x:0,y:0},
                     angle: this.angle || 0
                 }
@@ -245,7 +246,7 @@ export default class TankContainer extends me.Container {
     setBody() {
 
         this.body = new me.Body(this);
-        this.body.addShape(new me.Rect(0, 0, this.width, this.height));
+        this.body.addShape(new me.Rect(40, 50, 80, 100));
         this.body.collisionType = me.collision.types.PLAYER_OBJECT;
         this.body.gravity = 0;
         this.body.setMaxVelocity(0, 0);
@@ -293,23 +294,26 @@ export default class TankContainer extends me.Container {
         me.pool.register("TracksEntity", TracksEntity);
         me.pool.register("PlayerNameEntity", PlayerNameEntity);
 
+
         const tankSettings = {
             name: 'TankEntity',
-            x: 0.5,
-            y: 0.5,
-            width: 83,
-            height: 78,
-            image: game.tank_sheet, region: this.name == 'TankContainer' ? 'tankRed_outline' : 'tankBlack_outline',
+            x: 0,
+            y: 0,
+            width: 160,
+            height: 160,
+            image: game.tank_sheet, region: 'tank',
+            //image: 'tank',
             anchorPoint: {x:0,y:0},
         };
 
         const gunSettings = {
             name: 'GunEntity',
-            x: (83 - 24) / 2,
-            y: -10,
-            width: 24,
-            height: 58,
-            image: game.tank_sheet, region: this.name == 'TankContainer' ? 'barrelRed_outline' : 'barrelBlack_outline',
+            x: 0,
+            y: 0,
+            width: 160,
+            height: 160,
+            image: game.tank_sheet, region: 'barrel',
+            // image: 'barrel',
             anchorPoint: {x:0,y:0}
         };
 
@@ -338,25 +342,9 @@ export default class TankContainer extends me.Container {
         me.audio.play("shoot", false, null, 0.5);
 
 
-        this.addChild(me.pool.pull("FireEntity",
-            (this.width / 2) - 32,
-            -60,
-            {
-                name: 'FireEntity',
-                width: 64,
-                height: 64,
-                // frameheight: 64,
-                // framewidth: 64,
-                image: game.tank_sheet, region: 'fire',
-                anchorPoint: {x:0,y:0},
-                angle: this.angleGun || 0
-            }
-        ), 15);
-
-
         me.game.world.addChild(me.pool.pull("BulletEntity",
-            this.pos.x + (this.width / 2) - 10,
-            this.pos.y + (this.height / 2) - 34,
+            this.pos.x + (this.width / 2) - 12,
+            this.pos.y + 25,
             {
                 name: 'BulletEntity',
                 width: 20,
@@ -364,10 +352,27 @@ export default class TankContainer extends me.Container {
                 framewidth: 20,
                 frameheight: 34,
                 image: game.tank_sheet, region: 'bullet',
+                //image: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
                 shootedBy: this.body.collisionType,
                 shootedByPlayername: this.getPlayername()
+            }
+        ), 4);
+
+        this.addChild(me.pool.pull("FireEntity",
+            0,
+            0,
+            {
+                name: 'FireEntity',
+                width: 160,
+                height: 160,
+                // frameheight: 64,
+                // framewidth: 64,
+                image: game.tank_sheet, region: 'fire',
+                //image: 'fire',
+                anchorPoint: {x:0,y:0},
+                angle: this.angleGun || 0
             }
         ), 4);
 
@@ -416,70 +421,6 @@ export default class TankContainer extends me.Container {
         Mp.send({...game.mp});
 
     }
-
-/*
-    startGun(joystickRight, e) {
-
-        me.audio.playTrack("gun", 0.4);
-
-        this.centerGunPointer = {
-            x: joystickRight.pos.x + joystickRight.width / 2,
-            y: joystickRight.pos.y + joystickRight.height / 2,
-        };
-
-    }
-
-    stopGun(e) {
-
-        me.audio.stopTrack("gun");
-
-    }
-
-    rotateGun(e) {
-
-        var position = e.pos;
-        var center = this.centerGunPointer;
-
-
-        // angle in radians
-        var radians = Math.atan2(position.y - center.y, position.x - center.x);
-
-        // angle in degrees
-        var degrees = Math.atan2(position.y - center.y, position.x - center.x) * 180 / Math.PI;
-
-        degrees += 90;
-
-        if (position.x < 0 ) {
-            degrees += 180;
-        } else if(position.y < 0 ) {
-            degrees += 360;
-        }
-
-
-
-        const gun = this.getChildByName('GunEntity')[0];
-
-        this.angleGun += (degrees + this.prevGunDegrees) * (Math.PI / 180);
-
-        gun.centerRotate(this.prevGunDegrees);
-        gun.centerRotate(degrees);
-
-
-        game.mp.angleGun = this.angleGun;
-        game.mp.gunDegrees = degrees;
-
-        Mp.send({...game.mp});
-
-        setTimeout(() => {
-            game.mp.gunDegrees = 0;
-        }, 100);
-
-
-        this.prevGunDegrees = -degrees;
-        this.prevPosGun = e.pos;
-
-    }
-*/
 
     stopGun(e) {
 
@@ -552,29 +493,43 @@ export default class TankContainer extends me.Container {
 
         const totDegrees = (degrees - this.prevDegrees);
 
+
         const tank = this.getChildByName('TankEntity')[0];
         const gun = this.getChildByName('GunEntity')[0];
 
+        console.log(degrees, this.prevDegrees);
 
-        this.speed = 2;
+        //this.speed = 2;
 
-        // reverse gear?
-        if (
-            (totDegrees > 120 && totDegrees < 240) ||
-            (totDegrees < -120 && totDegrees > -240)
-        ) {
-            console.log('retro');
-            tank.centerRotate(180);
-            gun.centerRotate(180);
-
-            this.angleGun += 180 * (Math.PI / 180);
+        if (this.speed == 0) {
+            this.speed = 2;
         }
 
 
+        // reverse gear?
+        // if (
+        //     (totDegrees > 160 && totDegrees < 200) ||
+        //     (totDegrees < -160 && totDegrees > -200)
+        // ) {
+        //
+        //     console.log('retro');
+        //     tank.centerRotate(180);
+        //     gun.centerRotate(180);
+        //
+        //     this.angleGun += 180 * (Math.PI / 180);
+        //
+        // }
+
+
+        //this.body.addShape(new me.Rect(40, 50, 80, 100));
 
 
 
-
+        // this.body.getShape(0)
+        //     .translate(this.width / 2, this.height / 2)
+        //     .rotate(totDegrees * Math.PI / 180)
+        //     .translate(-this.width / 2, -this.height / 2)
+        //     .recalc();
 
 
         tank.centerRotate(totDegrees);
@@ -594,6 +549,17 @@ export default class TankContainer extends me.Container {
 
 
     }
+/*    postDraw(renderer) {
+
+
+        let shape = this.body.getShape(0);
+
+        renderer.setColor("red");
+
+        renderer.stroke(shape);
+
+
+    }*/
 
 
 }
@@ -614,16 +580,16 @@ class TankEntity extends me.Entity {
 
         this.body.removeShapeAt(0);
 
-        this.renderable.flipY(true).flipX(true);
-
     }
 
     centerRotate (deg) {
 
         this.renderable.currentTransform
-            .translate(this.renderable.width / 2, this.renderable.height / 2)
+            .translate(this.renderable.width / 2, this.renderable.height - 50)
             .rotate(deg * Math.PI / 180)
-            .translate(-this.renderable.width / 2, -this.renderable.height / 2);
+            .translate(-this.renderable.width / 2, -(this.renderable.height - 50));
+
+
     }
 
 }
@@ -650,9 +616,9 @@ class GunEntity extends me.Entity {
     centerRotate (deg) {
 
         this.renderable.currentTransform
-            .translate(this.renderable.width / 2, this.renderable.height - 10)
+            .translate(this.renderable.width / 2, this.renderable.height - 50)
             .rotate(deg * Math.PI / 180)
-            .translate(-this.renderable.width / 2, -(this.renderable.height - 10));
+            .translate(-this.renderable.width / 2, -(this.renderable.height - 50));
 
     }
 
@@ -669,13 +635,13 @@ class TracksEntity extends me.Entity {
         this.body.removeShapeAt(0);
         this.body.collisionType = me.collision.types.NO_OBJECT;
         this.renderable.currentTransform
-            .translate((this.renderable.width) / 2, (this.renderable.height -83) / 2  )
+            .translate((this.renderable.width) / 2, (this.renderable.height + 77) / 2  )
             .rotate(settings.angle)
-            .translate(-(this.renderable.width) / 2, -(this.renderable.height) / 2 );
+            .translate(-(this.renderable.width) / 2, -(this.renderable.height - 77) / 2 );
 
 
         // remove after 1 sec
-        me.timer.setInterval(() => {
+        let interval = me.timer.setInterval(() => {
 
             if (this && this.renderable) {
 
@@ -684,13 +650,14 @@ class TracksEntity extends me.Entity {
                 if (opacity <= 0) {
                     if (this.ancestor) {
                         this.ancestor.removeChild(this);
+                        me.timer.clearInterval(interval);
                     }
                 } else {
                     this.renderable.setOpacity( opacity - 0.1);
                 }
 
             }
-        }, 1000);
+        }, 500);
 
     }
 
@@ -708,9 +675,9 @@ class FireEntity extends me.Entity {
         this.body.removeShapeAt(0);
 
         this.renderable.currentTransform
-            .translate((this.renderable.width) / 2, (this.renderable.height + 32) )
+            .translate((this.renderable.width) / 2, (this.renderable.height  - 50) )
             .rotate(settings.angle)
-            .translate(-(this.renderable.width) / 2, -(this.renderable.height + 32) );
+            .translate(-(this.renderable.width) / 2, -(this.renderable.height - 50) );
 
 
         me.timer.setTimeout(() => {
@@ -744,11 +711,13 @@ class BulletEntity extends me.Entity {
         this.body.collisionType = me.collision.types.PROJECTILE_OBJECT;
 
 
+        //this.body.getShape(0).pos.x = -12;
+        this.body.getShape(0).pos.y = 84;
 
         this.renderable.currentTransform
-            .translate((this.renderable.width) / 2, (this.renderable.height) )
+            .translate((this.renderable.width) / 2, (this.renderable.height + 57) )
             .rotate(this.settings.angle)
-            .translate(-(this.renderable.width) / 2, -(this.renderable.height) );
+            .translate((-this.renderable.width + -6) / 2, -(this.renderable.height + 77));
 
         this.alwaysUpdate = true;
     }

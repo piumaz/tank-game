@@ -63,16 +63,16 @@ export default class EnemyContainer extends TankContainer {
 
 
         // reverse gear?
-        if (
-            (totDegrees > 120 && totDegrees < 240) ||
-            (totDegrees < -120 && totDegrees > -240)
-        ) {
-            console.log('retro');
-            tank.centerRotate(180);
-            gun.centerRotate(180);
-
-            this.angleGun += 180 * (Math.PI / 180);
-        }
+        // if (
+        //     (totDegrees > 120 && totDegrees < 240) ||
+        //     (totDegrees < -120 && totDegrees > -240)
+        // ) {
+        //     console.log('retro');
+        //     tank.centerRotate(180);
+        //     gun.centerRotate(180);
+        //
+        //     this.angleGun += 180 * (Math.PI / 180);
+        // }
 
 
         if (this.prevDegrees !== data.tankDegrees) {
