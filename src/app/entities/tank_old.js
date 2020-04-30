@@ -134,6 +134,75 @@ export default class TankContainer extends me.Container {
 
     }
 
+    update (dt) {
+
+        if (me.audio.seek("tank") >= 2.38) {
+            me.audio.seek("tank", 1.2);
+        }
+
+        if (me.audio.seek("gun_battle_sound-ReamProductions") >= 20) {
+            me.audio.seek("gun_battle_sound-ReamProductions", 0);
+        }
+
+        if (me.input.isKeyPressed('shoot')) {
+            this.shoot();
+        }
+
+        // gun keyboard movement
+        let moveAngle = 0;
+
+        if (this.isGunMoved !== 0) {
+            moveAngle = this.isGunMoved;
+        }
+
+        if (me.input.isKeyPressed('gunleft')) {
+            moveAngle = -2;
+        }
+        else if (me.input.isKeyPressed('gunright')) {
+            moveAngle = 2;
+        }
+        if (moveAngle !== 0) {
+
+            const deg = moveAngle;
+            this.angleGun += deg * Math.PI / 180;
+
+            this.getChildByName('GunEntity')[0].centerRotate(deg);
+
+            game.mp.angleGun = this.angleGun;
+            game.mp.gunDegrees += deg;
+        }
+
+
+        // move tank
+        this.pos.x += (this.speed * Math.sin(this.angle));
+        this.pos.y -= (this.speed * Math.cos(this.angle));
+
+
+
+        // add tracks
+        this.addTracks();
+
+
+        // apply physics to the body (this moves the entity)
+        this.body.update(dt);
+
+        this.updateChildBounds();
+
+        // handle collisions against other shapes
+        me.collision.check(this);
+
+        // send multiplayer data
+        game.mp = {...game.mp, ...{
+                x: this.pos.x,
+                y: this.pos.y,
+            }};
+        Mp.send({...game.mp});
+
+
+        return this._super(me.Container, "update", [dt]);
+
+    }
+
     /**
      * collision handler
      */
@@ -187,43 +256,6 @@ export default class TankContainer extends me.Container {
     }
 
     setVar() {
-
-        this.prevPos = {
-            x: 0,
-            y: 0
-        };
-
-        this.maxPower = 0.075;
-        this.maxReverse = 0.0375;
-        this.powerFactor = 0.001;
-        this.reverseFactor = 0.0005;
-
-        this.drag = 0.95;
-        this.angularDrag = 0.95;
-        this.turnSpeed = 0.002;
-
-        this.touching = {
-            up: 0,
-            down: 0,
-            left: 0,
-            right: 0
-        }
-        
-        this.localCar = {
-
-            x: me.game.viewport.width / 2,
-            y: me.game.viewport.height / 2,
-            xVelocity: 0,
-            yVelocity: 0,
-            power: 0,
-            reverse: 0,
-            angle: 0,
-            angularVelocity: 0,
-            isThrottling: false,
-            isReversing: false
-
-        };
-
 
         this.prevTrackPos = {
             x: 0,
@@ -441,84 +473,6 @@ export default class TankContainer extends me.Container {
 
         if (!this.isStarted) return;
 
-        
-        const diff = {
-            x: e.pos.x - this.prevPos.x,
-            y: e.pos.y - this.prevPos.y
-        };
-
-
-        this.prevPos.x = e.pos;
-
-
-        this.touching.up -= diff.y / (me.game.viewport.height / 3);
-        this.touching.down += diff.y / (me.game.viewport.height  / 3);
-        this.touching.left -= diff.x / (me.game.viewport.width / 3);
-        this.touching.right += diff.x / (me.game.viewport.width / 3);
-
-
-        this.touching.up = Math.max(0, Math.min(1, this.touching.up));
-        this.touching.down = Math.max(0, Math.min(1, this.touching.down));
-        this.touching.left = Math.max(0, Math.min(1, this.touching.left));
-        this.touching.right = Math.max(0, Math.min(1, this.touching.right));
-
-
-
-        const canTurn = this.localCar.power > 0.0025 || this.localCar.reverse;
-
-
-        const throttle = Math.round(this.touching.up * 10) / 10;
-        const reverse = Math.round(this.touching.down * 10) / 10;
-
-        if (this.localCar.isThrottling !== throttle || this.localCar.isReversing !== reverse) {
-            this.localCar.isThrottling = throttle;
-            this.localCar.isReversing = reverse;
-        }
-
-        const turnLeft = canTurn && Math.round(this.touching.left * 10) / 10;
-        const turnRight = canTurn && Math.round(this.touching.right * 10) / 10;
-
-
-        if (this.localCar.isTurningLeft !== turnLeft) {
-            this.localCar.isTurningLeft = turnLeft;
-        }
-
-        if (this.localCar.isTurningRight !== turnRight) {
-            this.localCar.isTurningRight = turnRight;
-        }
-
-
-        if (this.localCar.isThrottling) {
-            this.localCar.power += this.powerFactor * this.localCar.isThrottling;
-        } else {
-            this.localCar.power -= this.powerFactor;
-        }
-
-        if (this.localCar.isReversing) {
-            this.localCar.reverse += this.reverseFactor;
-        } else {
-            this.localCar.reverse -= this.reverseFactor;
-        }
-
-
-        this.localCar.power = Math.max(0, Math.min(this.maxPower, this.localCar.power));
-        this.localCar.reverse = Math.max(0, Math.min(this.maxReverse, this.localCar.reverse));
-
-        const direction = this.localCar.power > this.localCar.reverse ? 1 : -1;
-
-        if (this.localCar.isTurningLeft) {
-            this.localCar.angularVelocity -= direction * this.turnSpeed * this.localCar.isTurningLeft;
-        }
-        if (this.localCar.isTurningRight) {
-            this.localCar.angularVelocity += direction * this.turnSpeed * this.localCar.isTurningRight;
-        }
-
-    }
-
-    move_old(e) {
-
-        if (!this.isStarted) return;
-
         const position = e.pos;
         const center = this.centerPointer;
 
@@ -595,108 +549,6 @@ export default class TankContainer extends me.Container {
 
 
     }
-
-    update (dt) {
-
-
-        this.localCar.xVelocity += Math.sin(this.localCar.angle) * (this.localCar.power - this.localCar.reverse);
-        this.localCar.yVelocity += Math.cos(this.localCar.angle) * (this.localCar.power - this.localCar.reverse);
-
-
-        // move tank
-        console.log(this.pos.x, this.pos.y);
-        this.pos.x += this.localCar.xVelocity;
-        this.pos.y -= this.localCar.yVelocity;
-
-
-        this.localCar.x += this.localCar.xVelocity;
-        this.localCar.y -= this.localCar.yVelocity;
-
-
-        this.localCar.xVelocity *= this.drag;
-        this.localCar.yVelocity *= this.drag;
-
-
-        this.localCar.angle += this.localCar.angularVelocity;
-        this.localCar.angularVelocity *= this.angularDrag;
-
-
-
-        return this._super(me.Container, "update", [dt]);
-
-
-    }
-
-    update_old (dt) {
-
-        if (me.audio.seek("tank") >= 2.38) {
-            me.audio.seek("tank", 1.2);
-        }
-
-        if (me.audio.seek("gun_battle_sound-ReamProductions") >= 20) {
-            me.audio.seek("gun_battle_sound-ReamProductions", 0);
-        }
-
-        if (me.input.isKeyPressed('shoot')) {
-            this.shoot();
-        }
-
-        // gun keyboard movement
-        let moveAngle = 0;
-
-        if (this.isGunMoved !== 0) {
-            moveAngle = this.isGunMoved;
-        }
-
-        if (me.input.isKeyPressed('gunleft')) {
-            moveAngle = -2;
-        }
-        else if (me.input.isKeyPressed('gunright')) {
-            moveAngle = 2;
-        }
-        if (moveAngle !== 0) {
-
-            const deg = moveAngle;
-            this.angleGun += deg * Math.PI / 180;
-
-            this.getChildByName('GunEntity')[0].centerRotate(deg);
-
-            game.mp.angleGun = this.angleGun;
-            game.mp.gunDegrees += deg;
-        }
-
-
-        // move tank
-        this.pos.x += (this.speed * Math.sin(this.angle));
-        this.pos.y -= (this.speed * Math.cos(this.angle));
-
-
-
-        // add tracks
-        this.addTracks();
-
-
-        // apply physics to the body (this moves the entity)
-        this.body.update(dt);
-
-        this.updateChildBounds();
-
-        // handle collisions against other shapes
-        me.collision.check(this);
-
-        // send multiplayer data
-        game.mp = {...game.mp, ...{
-                x: this.pos.x,
-                y: this.pos.y,
-            }};
-        Mp.send({...game.mp});
-
-
-        return this._super(me.Container, "update", [dt]);
-
-    }
-
-
 /*    postDraw(renderer) {
 
 
