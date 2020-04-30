@@ -105,38 +105,40 @@ export default class EnemyContainer extends TankContainer {
         me.audio.play("shoot", false, null, 0.5);
 
 
-        this.addChild(me.pool.pull("FireEntity",
-            (this.width / 2) - 32,
-            -60,
-            {
-                name: 'FireEntity',
-                width: 64,
-                height: 64,
-                frameheight: 64,
-                framewidth: 64,
-                image: game.tank_sheet, region: 'fire',
-                anchorPoint: {x:0,y:0},
-                angle: this.angleGun || 0
-            }
-        ), 15);
-
-
-        this.addChild(me.pool.pull("BulletEntity",
-            (this.width / 2) - 6,
-            (this.height / 2) - 26,
+        me.game.world.addChild(me.pool.pull("BulletEntity",
+            this.pos.x + (this.width / 2) - 12,
+            this.pos.y + 25,
             {
                 name: 'BulletEntity',
-                width: 12,
-                height: 12,
-                frameheight: 26,
-                framewidth: 12,
+                width: 20,
+                height: 20    ,
+                framewidth: 20,
+                frameheight: 34,
                 image: game.tank_sheet, region: 'bullet',
+                //image: 'bullet',
                 anchorPoint: {x:0,y:0},
                 angle: this.angleGun || 0,
                 shootedBy: this.body.collisionType,
                 shootedByPlayername: this.getPlayername()
             }
         ), 15);
+
+        this.addChild(me.pool.pull("FireEntity",
+            0,
+            0,
+            {
+                name: 'FireEntity',
+                width: 160,
+                height: 160,
+                // frameheight: 64,
+                // framewidth: 64,
+                image: game.tank_sheet, region: 'fire',
+                //image: 'fire',
+                anchorPoint: {x:0,y:0},
+                angle: this.angleGun || 0
+            }
+        ), 15);
+
 
     }
 
