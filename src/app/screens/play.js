@@ -54,7 +54,7 @@ export default class PlayScreen extends me.Stage {
 
                     players[sessionId] = me.game.world.addChild(me.pool.pull("TankContainer", player.x, player.y, 160, 160), 5);
                 } else {
-                    players[sessionId] = me.game.world.addChild(me.pool.pull("EnemyContainer", player.x, player.y, 83, 78), 5);
+                    players[sessionId] = me.game.world.addChild(me.pool.pull("EnemyContainer", player.x, player.y, 160, 160), 5);
                 }
 
             });
