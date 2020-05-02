@@ -146,10 +146,6 @@ export default class EnemyContainer extends TankContainer {
 
     }
 
-    isDead() {
-        return this.dead;
-    }
-
     update(dt) {
 
 

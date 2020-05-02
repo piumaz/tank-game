@@ -333,7 +333,7 @@ export default class TankContainer extends me.Container {
     }
 
     isDead() {
-        return game.mp.hit || this.dead;
+        return (game.mp.hit || this.dead) ? true : false;
     }
 
     shoot() {
