@@ -286,6 +286,8 @@ export default class TankContainer extends me.Container {
 
         this.ammo = true;
 
+        this.dead = false;
+
 
     }
 
@@ -404,10 +406,10 @@ export default class TankContainer extends me.Container {
         Mp.send({...game.mp});
 
         game.mp.shoot = false;
-/*
+
         setTimeout(() => {
             game.mp.shoot = false;
-        }, 100);*/
+        }, 100);
 
     }
 
