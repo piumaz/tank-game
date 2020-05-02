@@ -389,14 +389,12 @@ export default class TankContainer extends me.Container {
 
         let timeAmmo = me.timer.setTimeout(() => {
 
-            me.audio.play("reload", false, () => {
-                this.ammo = true;
-            }, 0.5);
-
+            me.audio.play("reload", false, null, 0.6);
+            this.ammo = true;
 
             me.timer.clearInterval(timeAmmo);
 
-        }, 3000);
+        }, 2000);
 
 
 
