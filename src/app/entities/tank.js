@@ -283,6 +283,10 @@ export default class TankContainer extends me.Container {
         this.anchorPoint.y = 0;
 
         this.isGunMoved = 0;
+
+        this.ammo = true;
+
+
     }
 
     mount() {
@@ -327,18 +331,24 @@ export default class TankContainer extends me.Container {
     }
 
     isDead() {
-        return game.mp.hit;
+        return game.mp.hit || this.dead;
     }
 
     shoot() {
 
-        if ( this.isDead() || me.game.world.getChildByName('BulletEntity').length > 0) {
+        if ( this.isDead() ) {
+            return;
+        }
+
+        if ( !this.ammo ) {
+            me.audio.play("cling", false, null, 0.5);
             return;
         }
 
 
         const gun = this.getChildByName('GunEntity')[0];
 
+        this.ammo = false;
         me.audio.play("shoot", false, null, 0.5);
 
 
@@ -346,7 +356,7 @@ export default class TankContainer extends me.Container {
             this.pos.x + (this.width / 2) - 12,
             this.pos.y + 25,
             {
-                name: 'BulletEntity',
+                name: 'BulletEntity_player',
                 width: 20,
                 height: 20    ,
                 framewidth: 20,
@@ -376,18 +386,33 @@ export default class TankContainer extends me.Container {
             }
         ), 4);
 
+
+        let timeAmmo = me.timer.setTimeout(() => {
+
+            this.ammo = true;
+
+            me.timer.clearInterval(timeAmmo);
+
+        }, 3000);
+
+
+
+
         // send multiplayer data
         game.mp.shoot = true;
         Mp.send({...game.mp});
 
+        game.mp.shoot = false;
+/*
         setTimeout(() => {
             game.mp.shoot = false;
-        }, 100);
+        }, 100);*/
 
     }
 
     explode() {
 
+        this.dead = true;
         me.game.viewport.shake(10, 500, me.game.viewport.AXIS.BOTH);
 
         this.stop(null);
@@ -402,10 +427,14 @@ export default class TankContainer extends me.Container {
         tank.renderable.flicker(500);
         gun.renderable.flicker(500);
 
+        /*
+
         if (this.name == 'EnemyContainer') {
             this.pos.x = -300;
             this.pos.y = -300;
         }
+        */
+
     }
 
     respawn(x, y) {
@@ -414,6 +443,8 @@ export default class TankContainer extends me.Container {
 
         this.pos.x = x;
         this.pos.y = y;
+
+        this.dead = false;
 
         // send multiplayer data
         game.mp.respawn = false;
@@ -759,7 +790,7 @@ class BulletEntity extends me.Entity {
 
         }
 
-        if (this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
+        if (!other.isDead() && this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
 
             console.log('colpito il nemico');
 
@@ -776,7 +807,7 @@ class BulletEntity extends me.Entity {
 
         }
 
-        if (this.settings.shootedBy === me.collision.types.ENEMY_OBJECT && response.b.body.collisionType === me.collision.types.PLAYER_OBJECT) {
+        if (!other.isDead() && this.settings.shootedBy === me.collision.types.ENEMY_OBJECT && response.b.body.collisionType === me.collision.types.PLAYER_OBJECT) {
 
             console.log('colpito dal nemico');
 

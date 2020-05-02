@@ -100,6 +100,10 @@ export default class EnemyContainer extends TankContainer {
 
     shoot() {
 
+        if ( this.isDead() ) {
+            return;
+        }
+
         const gun = this.getChildByName('GunEntity')[0];
 
         me.audio.play("shoot", false, null, 0.5);
@@ -140,6 +144,10 @@ export default class EnemyContainer extends TankContainer {
         ), 15);
 
 
+    }
+
+    isDead() {
+        return this.dead;
     }
 
     update(dt) {
