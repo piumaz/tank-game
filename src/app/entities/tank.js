@@ -341,7 +341,7 @@ export default class TankContainer extends me.Container {
         }
 
         if ( !this.ammo ) {
-            me.audio.play("cling", false, null, 0.5);
+            me.audio.play("dry", false, null, 0.5);
             return;
         }
 
@@ -389,7 +389,10 @@ export default class TankContainer extends me.Container {
 
         let timeAmmo = me.timer.setTimeout(() => {
 
-            this.ammo = true;
+            me.audio.play("reload", false, () => {
+                this.ammo = true;
+            }, 0.5);
+
 
             me.timer.clearInterval(timeAmmo);
 

@@ -30,6 +30,16 @@ const resources = [
         "type": "audio",
         "src": "assets/sfx/"
     },
+    {
+        "name": "dry",
+        "type": "audio",
+        "src": "assets/sfx/"
+    },
+    {
+        "name": "reload",
+        "type": "audio",
+        "src": "assets/sfx/"
+    },
 
     // background
     {
