@@ -405,8 +405,6 @@ export default class TankContainer extends me.Container {
         game.mp.shoot = true;
         Mp.send({...game.mp});
 
-        game.mp.shoot = false;
-
         setTimeout(() => {
             game.mp.shoot = false;
         }, 100);
