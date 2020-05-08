@@ -391,10 +391,12 @@ export default class TankContainer extends me.Container {
 
         let timeAmmo = me.timer.setTimeout(() => {
 
-            me.audio.play("reload", false, null, 0.6);
-            this.ammo = true;
+            me.audio.play("reload", false, () => {
 
-            me.timer.clearInterval(timeAmmo);
+                this.ammo = true;
+                me.timer.clearInterval(timeAmmo);
+
+            }, 0.6);
 
         }, 2000);
 
@@ -503,7 +505,7 @@ export default class TankContainer extends me.Container {
 
     move(e) {
 
-        if (!this.isStarted) return;
+        if (!this.isStarted || this.isDead()) return;
 
         const position = e.pos;
         const center = this.centerPointer;
