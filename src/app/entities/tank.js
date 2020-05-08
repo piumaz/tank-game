@@ -793,42 +793,44 @@ class BulletEntity extends me.Entity {
 
         }
 
-        console.log(other, response);
-        if (other && !other.isDead() && this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
 
-            console.log('colpito il nemico');
+        if (this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
 
-            game.data.score += 10;
+            if (other && !other.isDead()) {
+                console.log('colpito il nemico');
 
-            if(this.ancestor) {
-                this.ancestor.removeChild(this);
+                game.data.score += 10;
+
+                if(this.ancestor) {
+                    this.ancestor.removeChild(this);
+                }
+
+                other.explode();
+
+
+                return true;
             }
-
-            other.explode();
-
-
-            return true;
-
         }
 
         if (other && !other.isDead() && this.settings.shootedBy === me.collision.types.ENEMY_OBJECT && response.b.body.collisionType === me.collision.types.PLAYER_OBJECT) {
 
-            console.log('colpito dal nemico');
+            if (other && !other.isDead()) {
+                console.log('colpito dal nemico');
 
-            if(this.ancestor) {
-                this.ancestor.removeChild(this);
+                if (this.ancestor) {
+                    this.ancestor.removeChild(this);
+                }
+
+                other.explode();
+
+
+                // send multiplayer data
+                game.mp.hit = true;
+                game.mp.hitBy = this.settings.shootedByPlayername;
+                Mp.send({...game.mp});
+
+                return true;
             }
-
-            other.explode();
-
-
-            // send multiplayer data
-            game.mp.hit = true;
-            game.mp.hitBy = this.settings.shootedByPlayername;
-            Mp.send({...game.mp});
-
-            return true;
-
         }
 
 
