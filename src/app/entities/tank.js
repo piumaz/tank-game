@@ -793,7 +793,7 @@ class BulletEntity extends me.Entity {
 
         }
 
-        if (!other.isDead() && this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
+        if (other && !other.isDead() && this.settings.shootedBy === me.collision.types.PLAYER_OBJECT && response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
 
             console.log('colpito il nemico');
 
@@ -810,7 +810,7 @@ class BulletEntity extends me.Entity {
 
         }
 
-        if (!other.isDead() && this.settings.shootedBy === me.collision.types.ENEMY_OBJECT && response.b.body.collisionType === me.collision.types.PLAYER_OBJECT) {
+        if (other && !other.isDead() && this.settings.shootedBy === me.collision.types.ENEMY_OBJECT && response.b.body.collisionType === me.collision.types.PLAYER_OBJECT) {
 
             console.log('colpito dal nemico');
 
